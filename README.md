@@ -1,6 +1,8 @@
 Requires Python 3
+
 Requires x3270 on PATH
   get it from: http://x3270.bgp.nu/ 
+  
 Requires package py3270
 
 main.py has object 'Handler' that has methods to interact with the IBM mainframe. 
