@@ -1,4 +1,8 @@
 from py3270 import Emulator
+import re
+from pprint import pprint
+import webbrowser
+import time
 
 
 class LoginError(Exception):
@@ -76,9 +80,6 @@ class Handler(Emulator):
         else:
             raise NavigationError("Destination does not exist")
 
-        print(self.string_get(16, 24, 36))
-
-
         self.send_enter()
         self.wait_for_field()
         if self.string_get(16, 24, 36) == "SELECTION NOT AVAILABLE AT THIS TIME":
@@ -125,12 +126,15 @@ class Handler(Emulator):
         # Navigate to search
         self.goto("search")
 
-        if len(code) <= 8:
-            self.send_string(code, 2, 24)
+        # search course by code
+        if re.fullmatch("[a-zA-Z]{2,4}[0-9]{0,4}", code):
+            # code must match regex for it to pass else raise ValueError
+            self.send_string(code, 3, 24)
         else:
-            raise ValueError("Code query exceeds 8 characters in lengh")
+            raise ValueError("Code query is not in proper format")
 
-        if len(semester) <= 1 and semester in "abAB":
+        # semester selector
+        if len(semester) <= 1 and semester in "SFsf":
             self.send_string(semester, 2, 24)
         else:
             if isinstance(semester, int):
@@ -138,7 +142,85 @@ class Handler(Emulator):
             elif isinstance(semester, str):
                 raise ValueError("Semester query must be 'A' or 'B'")
 
-        if len()
+        # open/closed course selector
+        if isinstance(status, str) and status in "AaOo":
+            self.send_string(status, 4, 24)
+        elif not isinstance(status, str):
+            raise TypeError(
+                "Status query must be of str instance")
+        elif status not in "AaOo":
+            raise ValueError("Status query must be 'A' or 'B'")
+
+        # search by title
+        if re.fullmatch("[a-zA-Z ]{0,13}", str(title)):
+            self.send_string(title, 5, 28)
+        elif not isinstance(title, str):
+            raise TypeError()
+        elif len(title) > 13:
+            raise ValueError(
+                "Title query must be 13 characters or shorter and not contain numbers")
+
+
+        if re.fullmatch("[a-zA-Z ]{0,13}", str(instructor)):
+            self.send_string(instructor, 5, 57)
+        elif not isinstance(instructor, str):
+            raise TypeError("Instructor query must be of str instance")
+        elif len(instructor) > 13:
+            raise ValueError(
+                "Instructor query must be 13 characters or shorter and not contain numbers")
+
+        self.send_enter()
+        self.wait_for_field()
+
+        result = self.get_result()
+        print("Returned result")
+        return result
+
+    def get_result(self):
+        data = []
+
+        while 1:
+            for n in range(8, 24):
+                # iterates though lines and pages till end of list where it returns data
+                title = self.string_get(n, 23, 22)
+                index = self.string_get(n, 2, 4)
+                course = self.string_get(n, 7, 10)
+                cr = self.string_get(n, 19, 1)
+                lvl = self.string_get(n, 21, 1)
+                schedule = self.string_get(n, 46, 11)
+                instructor = self.string_get(n, 58, 8)
+                comment = self.string_get(n, 66, 15)
+
+                if index == "  *E":
+                    return data
+
+                row = {
+                    "title": title,
+                    "index": index,
+                    "course": course,
+                    "cr": cr,
+                    "lvl": lvl,
+                    "schedule": schedule,
+                    "instructor": instructor,
+                    "comment": comment
+                }
+                data.append(row)
+
+            self.wait_for_field()
+            self.send_enter()
+
+    def more_info(self, code):
+        year = time.strftime("%Y")
+
+        if int(time.strftime("%U")) > 26:
+            cterm = year + "F"
+            rterm = str(int(year)+1) + "S"
+        else:
+            cterm = year + "S"
+            rterm = year + "F"
+
+        webbrowser.open(
+            f"https://services.bc.edu/courseinfosched/main/courseinfoschedResults!displayOneCourseMethod.action?courseKey={rterm}+{code.upper()}&presentTerm={cterm}&registrationTerm={rterm}")
 
 
 host = "N:bcvmcms.bc.edu"
@@ -150,8 +232,7 @@ e = Handler(visible=True)
 # e.connect(host)
 e.wait_for_field()
 e.login(username, password)
-e.menu("register")
+search = e.search("econ")
+pprint(search)
 # e.logoff()
-
-
-input()
+e.more_info("Econ115008")
