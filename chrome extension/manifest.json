@@ -1,0 +1,21 @@
+{
+    "manifest_version": 2,
+    "name": "BC UIS sucs",
+    "version": "0.0.1",
+    "permissions": [
+        "storage"
+    ],
+    "content_scripts": [
+        {
+            "matches": ["https://services.bc.edu/courseinfosched/courseinfoschedResults*"],
+            "js": ["jquery-3.3.1.min.js", "inject.js", "scrape.js"]
+        },
+        {
+            "matches": ["https://services.bc.edu/courseinfosched/main/courseinfosched*"],
+            "js": ["jquery-3.3.1.min.js", "inject_main.js", "scrape.js"]
+        }
+    ],
+    "page_action": {
+        "default_popup": "popup.html"
+    }
+}

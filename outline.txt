@@ -1,0 +1,41 @@
+HOST:
+    N:bcvmcms.bc.edu
+LOGIN:
+    USERNAME: (7, 46)
+    PASSWORD: (9, 46)
+MAIN:
+    INPUT:
+        OPTION: (16, 22)
+    OPTION:
+        ERROR: (16, 24)
+AUDIT:
+    INPUT:
+        OPTION: (18, 62)
+    OUTPUT:
+
+SEARCH:
+    INPUT:
+        SEMESTER: (2, 24, 1)
+        CODE: (3, 24, 8)
+        STATUS: (4, 24, 1)
+        TITLE: (5, 28, 13)
+        INSTRUCTOR: (5, 57, 13)
+    OUTPUT: (8, n, 16)
+        INDEX: (n, 2, 4)
+        COURSE: (n, 7, 10)
+        CR: (n, 19, 1)
+        LVL: (n, 21, 1)
+        TITLE: (n, 23, 22)
+        SCHEDULE: (n, 46, 11)
+        INSTRUCTOR: (n, 58, 8)
+        COMMENT: (n, 66, 15)
+    END_OF_PAGE:
+        line: (24, 23)
+        string: *Press
+    END:
+        line: (n, 4)
+        string: *End
+
+
+https://services.bc.edu/courseinfosched/main/courseinfoschedResults!displayOneCourseMethod.action?courseKey=2019S+AADS110501&presentTerm=2019F&registrationTerm=2019S
+https://services.bc.edu/courseinfosched/main/courseinfoschedResults!displayOneCourseMethod.action?courseKey=2018U+CLAS106301&presentTerm=2019F&registrationTerm=2019S

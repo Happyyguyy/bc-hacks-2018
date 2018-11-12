@@ -224,15 +224,22 @@ class Handler(Emulator):
 
 
 host = "N:bcvmcms.bc.edu"
-username = "chodr"
-password = "East5sea"
 
 
-e = Handler(visible=True)
-# e.connect(host)
-e.wait_for_field()
-e.login(username, password)
-search = e.search("econ")
-pprint(search)
-# e.logoff()
-e.more_info("Econ115008")
+def main():
+    from getpass import getpass
+
+    username = input("Username?: ")
+    password = getpass()
+
+    e = Handler(visible=True)
+    # e.connect(host)
+    e.wait_for_field()
+    e.login(username, password)
+    search = input("Course code (partial or whole)")
+    pprint(search)
+    # e.logoff()
+
+
+if __name__ == '__main__':
+    main()
