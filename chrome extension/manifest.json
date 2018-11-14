@@ -3,7 +3,9 @@
     "name": "BC UIS sucs",
     "version": "0.0.1",
     "permissions": [
-        "storage"
+        "storage",
+        "declarativeContent",
+        "tabs"
     ],
     "content_scripts": [
         {
@@ -17,5 +19,9 @@
     ],
     "page_action": {
         "default_popup": "popup.html"
+    },
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
     }
 }
