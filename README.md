@@ -13,7 +13,7 @@ A couple ways to link the two components:
     
     (__note:__ nothing is acutally linked yet)
     
-__Big note: I actually don't know if it's against school policy to modify a portal webpage or scrape data with a script. Please no one get me in trouble__
+__Big note: I actually don't know if it's against school policy to modify the portal webpage or scrape data with a script. Please no one get me in trouble__
 
 __smaller note:__ If I am against school policy please let me know as soon as possible, I will cease and desist.
 
@@ -53,7 +53,8 @@ __smaller note:__ If I am against school policy please let me know as soon as po
     Adds a button to add to or remove courses from a shortlist.
 
     the shortlist holds the courses that have been selected. 
+    
+    Generates a mock timetable to easily visualize 
 
     on add: extension scrapes the course details page and adds the data into the shortlist
 
-    *work-in-progress:* working on a user interface to interact with selected courses
